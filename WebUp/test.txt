@@ -1,0 +1,23 @@
+Content-Type: application/json
+POST /upload
+
+
+
+{
+  "property":"propertyMe",
+  "customer":"Aussie",
+  "action":"order created",
+  "value":"1000",
+  "file":"fileMe"
+}
+
+
+
+{
+"added": "true"
+"hash": "df699695c36c6c9ed60ef569acff6bf5"
+}
+
+
+
+http://evilapi.afdcloud.com.au/check?hash=df699695c36c6c9ed60ef569acff6bf5

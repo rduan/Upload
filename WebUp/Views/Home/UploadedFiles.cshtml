@@ -1,0 +1,18 @@
+﻿@using WebUp.Models
+@model List<WebUp.Models.ViewDataUploadFilesResult>
+
+@{
+    ViewBag.Title = "UploadFiles";
+}
+
+<h2>UploadFiles</h2>
+
+<ul>
+    @foreach (ViewDataUploadFilesResult v in this.ViewData.Model)
+    {
+        <li>
+            Uploaded:@v.Name
+            totalling bytes: @v.Length
+        </li>
+    }
+</ul>

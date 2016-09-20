@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@*<form action="/home/uploadfiles" method="post" enctype="multipart/form-data">
+    <label for="file">Filename:</label>
+    <input type="file" name="file" id="file"/>
+
+    <input type="submit" name="submit" value="Submit"/>
+</form>
+
+<form action="api/upload" method="post" enctype="multipart/form-data">
+
+    <label for="file">Filename:</label>
+    <input type="file" name="file" id="file"/>
+
+    <input type="submit"/>
+</form>
+
+<form>
+    <input type="file" id="myfile"/>
+    <input type="button" id="uploadButton" value="Upload"/>
+</form>*@
+<form id="uploader">
+    <input id="fileInput" type="file" >
+    <input type="submit" value="Upload file" />
+</form>
+<div id="uploadMsg">
+    
+</div>
+
+@section scripts{
+
+    <script>
+
+
+        document.getElementById('uploader').onsubmit = function() {
+            var formdata = new FormData(); //FormData object
+            var fileInput = document.getElementById('fileInput');
+            //Iterating through each files selected in fileInput
+            for (i = 0; i < fileInput.files.length; i++) {
+                //Appending each file to FormData object
+                formdata.append(fileInput.files[i].name, fileInput.files[i]);
+            }
+            //Creating an XMLHttpRequest and sending
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/Upload', true);
+            xhr.send(formdata);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    /*  //alert(xhr.responseText);
+                      $('#uploadMsg').text = xhr.responseText;
+                  } else {*/
+                    $('#uploadMsg').text = xhr.responseText;
+                    alert(xhr.readyState + "  " + xhr.responseText);
+                    //
+                }
+            }
+            return false;
+        }
+    </script>
+
+    @*<script type="text/javascript">
+        function uploadFile() {
+            var xhr = new XMLHttpRequest();
+            var file = document.getElementById('myfile').files[0];
+            xhr.open("POST", "api/myfileupload");
+            xhr.setRequestHeader("filename", file.name);
+            xhr.send(file);
+        }
+    </script>*@
+}
