@@ -20,8 +20,8 @@ namespace WebUp.Controllers
             HttpResponseMessage result = null;
             if (request.Files.Count == 0)
             {
-                result = Request.CreateResponse(HttpStatusCode.BadRequest);
-                //return result;
+                result = Request.CreateResponse(HttpStatusCode.BadRequest,"Please select a file... ");
+                return result;
             }
 
 
@@ -41,7 +41,7 @@ namespace WebUp.Controllers
                 };
 
                 StreamReader csvreader = new StreamReader(file.InputStream);
-                //HttpResponseMessage response = null;
+                
                 UpLoadResult upLoadResult=new UpLoadResult
                 {
                     TotalNum = 0,
@@ -66,10 +66,8 @@ namespace WebUp.Controllers
                             order.value = values[1];
                             upLoadResult.TotalNum++;
 
-                            //await UploadOrder(order);
-
+                
                             var response = await client.PostAsJsonAsync("/upload", order);
-                            // New code:
                             if (response.IsSuccessStatusCode)
                             {
                                 upLoadResult.UploadedNum++;
@@ -82,29 +80,15 @@ namespace WebUp.Controllers
                     }
                     
                 }
-                string rs = "Total Orders: " + upLoadResult.TotalNum + "  successfully uploaded: " +
+                string rs = "Total Orders: " + upLoadResult.TotalNum + " ;     Successfully uploaded: " +
                                 upLoadResult.UploadedNum;
                 result = Request.CreateResponse(HttpStatusCode.Created, rs);
-                //return response;
-
+            
             }
-            //result = new HttpRequest(HttpStatusCode.Created,UpLoadResult);
             return result;
         }
 
 
-        /*private async Task<HttpResponseMessage> UploadOrder(Order order)
-        {
-            using (var client = new HttpClient())
-            {
-                // New code:
-                client.BaseAddress = new Uri("http://evilapi.afdcloud.com.au/");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage response = await client.PostAsJsonAsync("api/products", order);
-                return response;
-            }
-
-        }*/
+       
     }
 }

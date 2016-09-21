@@ -2,37 +2,47 @@
     ViewBag.Title = "Home Page";
 }
 
-@*<form action="/home/uploadfiles" method="post" enctype="multipart/form-data">
-    <label for="file">Filename:</label>
-    <input type="file" name="file" id="file"/>
+@*<h4>Select CSV file to upload</h4>
 
-    <input type="submit" name="submit" value="Submit"/>
-</form>
-
-<form action="api/upload" method="post" enctype="multipart/form-data">
-
-    <label for="file">Filename:</label>
-    <input type="file" name="file" id="file"/>
-
-    <input type="submit"/>
-</form>
-
-<form>
-    <input type="file" id="myfile"/>
-    <input type="button" id="uploadButton" value="Upload"/>
-</form>*@
 <form id="uploader">
-    <input id="fileInput" type="file" >
-    <input type="submit" value="Upload file" />
+    <input id="fileInput" type="file" class="form-control">
+    <input type="submit" value="Upload file" class="btn btn-info"/>
 </form>
 <div id="uploadMsg">
     
+</div>*@
+
+<div>
+    <form id="uploader">
+        <div>
+            <div @*class="col-lg-6 col-sm-6 col-12"*@>
+                <h4>Select CSV file</h4>
+                <div class="input-group">
+                    <label class="input-group-btn">
+                        <span class="btn btn-primary">
+                            Browse&hellip; <input type="file" style="display: none;" id="fileInput">
+                        </span>
+                    </label>
+                    <input type="text" class="form-control" readonly>
+                </div>
+
+                <span class="help-block">
+
+                </span>
+            </div>
+            <div>
+                <input type="submit" value="Upload" class="btn btn-info"/>
+            </div>
+        </div>
+    </form>
+    <div class="alert alert-success" role="alert" id="response">. </div>
 </div>
+
 
 @section scripts{
 
     <script>
-
+        
 
         document.getElementById('uploader').onsubmit = function() {
             var formdata = new FormData(); //FormData object
@@ -51,22 +61,36 @@
                     /*  //alert(xhr.responseText);
                       $('#uploadMsg').text = xhr.responseText;
                   } else {*/
-                    $('#uploadMsg').text = xhr.responseText;
-                    alert(xhr.readyState + "  " + xhr.responseText);
-                    //
+                    document.getElementById('response').innerHTML = xhr.responseText.toString();
+                    //alert(xhr.readyState + "  " + xhr.responseText);
+                    
                 }
             }
             return false;
         }
+
+        $(document).on('change', ':file', function () {
+            var input = $(this),
+                numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            input.trigger('fileselect', [numFiles, label]);
+        });
+
+        $(document).ready(function () {
+            $(':file').on('fileselect', function (event, numFiles, label) {
+
+                var input = $(this).parents('.input-group').find(':text'),
+                    log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+                if (input.length) {
+                    input.val(log);
+                } else {
+                    if (log) alert(log);
+                }
+
+            });
+        });
     </script>
 
-    @*<script type="text/javascript">
-        function uploadFile() {
-            var xhr = new XMLHttpRequest();
-            var file = document.getElementById('myfile').files[0];
-            xhr.open("POST", "api/myfileupload");
-            xhr.setRequestHeader("filename", file.name);
-            xhr.send(file);
-        }
-    </script>*@
+
 }
